@@ -1,32 +1,48 @@
-import globals from "globals";
 import pluginJs from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
 export default [
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
   {
-    // 対象ファイルを指定し、グローバルな言語オプションを適用
-    files: ["**/*.tsx"], // 全ての階層の拡張子がjsファイルにeslintを適用
+    files: ["**/*.tsx"],
     languageOptions: {
-      globals: globals.browser, // ブラウザ環境のグローバル変数を許可
+      parser: tseslint.parser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: { jsx: true },
+        project: "./tsconfig.json",
+      },
+      globals: globals.browser,
     },
-    ignores: ["before.js"], // 無視するファイルを指定
-    // 推奨設定を適用
-    ...pluginJs.configs.recommended,
-    // カスタムルールを指定
+    plugins: {
+      react: require("eslint-plugin-react"),
+      "react-hooks": require("eslint-plugin-react-hooks"),
+    },
     rules: {
-      "no-unused-vars": ["error"], // 未使用の変数をエラーとして検出
-      "no-undef": ["error"], // 未定義の変数をエラーとして検出
-      eqeqeq: ["error", "always"], // 厳密な等価演算子を強制
-      "no-console": ["warn"], // console.log の使用を警告
-      indent: ["error", 4], // インデントを4スペースで強制
-      quotes: ["error", "single"], // シングルクォートを強制
-      semi: ["error", "always"], // セミコロンを必須に
-      "brace-style": ["error", "1tbs"], // ブレースのスタイルを "1tbs" に強制
-      camelcase: ["error", { properties: "always" }], // キャメルケースを強制
-      "no-magic-numbers": ["warn", { ignore: [0, 1] }], // マジックナンバーの使用を警告
-      "consistent-return": ["error"], // 一貫した return を強制
-      "no-var": ["error"], // var の使用を禁止
-      complexity: ["warn", { max: 10 }], // 関数の複雑さを制限
-      "prefer-const": ["error"], // 再代入されない変数に const を推奨
+      "react/react-in-jsx-scope": "off", // Next.jsなので不要
+      "react/jsx-uses-react": "off", // 同上
+      "react/jsx-uses-vars": "error",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+
+      // あなたの追加ルール
+      "no-unused-vars": ["error"],
+      "no-undef": ["error"],
+      eqeqeq: ["error", "always"],
+      "no-console": ["warn"],
+      indent: ["error", 4],
+      quotes: ["error", "single"],
+      semi: ["error", "always"],
+      "brace-style": ["error", "1tbs"],
+      camelcase: ["error", { properties: "always" }],
+      "no-magic-numbers": ["warn", { ignore: [0, 1] }],
+      "consistent-return": ["error"],
+      "no-var": ["error"],
+      complexity: ["warn", { max: 10 }],
+      "prefer-const": ["error"],
     },
   },
 ];
