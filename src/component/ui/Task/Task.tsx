@@ -8,39 +8,30 @@ import {
   Typography,
 } from "@mui/material";
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
-
-const Task = () => {
+type taskProps = { itemCount: number };
+const Task = (props: taskProps) => {
   return (
-    <Box sx={{ maxWidth: 200 }}>
-      <Card variant="outlined">
-        <CardContent>
-          <Typography
-            gutterBottom
-            sx={{ color: "text.secondary", fontSize: 14 }}
-          >
-            Word of the Day
-          </Typography>
-          <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-            adjective
-          </Typography>
-          <Typography variant="body2">
-            well meaning and kindly.
-            <br />
-            {'"a benevolent smile"'}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button size="small">Learn More</Button>
-        </CardActions>
-      </Card>
+    <Box
+      display="grid"
+      gridTemplateColumns="repeat(auto-fit, minmax(160px, 1fr))"
+      gap={2}
+      justifyContent="center"
+      marginTop={2}
+    >
+      {Array.from({ length: props.itemCount }).map((_, i) => (
+        <Box
+          key={i}
+          width={160}
+          height={100}
+          bgcolor="lightblue"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          borderRadius={1}
+        >
+          Task {i + 1}
+        </Box>
+      ))}
     </Box>
   );
 };
